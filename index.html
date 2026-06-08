@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FindOut — Find Out Before You Give.</title>
 <meta name="description" content="FindOut shows you IRS verification and real financials for every nonprofit in America. Search. Verify. Donate. Volunteer. Free.">
-<link rel="canonical" href="https://findout-app.netlify.app/">
+<link rel="canonical" href="https://findoutfund.org/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://findout-app.netlify.app/">
+<meta property="og:url" content="https://findoutfund.org/">
 <meta property="og:title" content="FindOut — Find Out Before You Give.">
 <meta property="og:description" content="Search, verify, donate and volunteer. Real IRS data for 1.8M+ nonprofits. Free iOS app.">
 <meta property="og:site_name" content="FindOut">
@@ -255,7 +255,7 @@ footer strong { color:#4CAF50; }
     <h2>Support FindOut</h2>
     <p>FindOut is free for donors and nonprofits. A small platform fee on in-app donations helps keep the lights on. If you believe in transparent giving, you can support development, local outreach, and fee relief for small orgs.</p>
     <a href="#" class="btn" id="support-stripe-btn" target="_blank" rel="noopener">Support FindOut</a>
-    <a href="mailto:malta_rafa@hotmail.com?subject=Support%20FindOut" class="btn btn-secondary" id="support-email-btn">Contact us</a>
+    <a href="mailto:hello@findoutfund.org?subject=Support%20FindOut" class="btn btn-secondary" id="support-email-btn">Contact us</a>
     <p class="support-note" id="support-stripe-note">Add your Stripe Payment Link in site-config.js after creating it in the Stripe Dashboard.</p>
   </div>
 </section>
@@ -285,11 +285,12 @@ footer strong { color:#4CAF50; }
   <div class="footer-social">
     <a href="https://www.instagram.com/findoutapp" id="footer-instagram" target="_blank" rel="noopener">Instagram</a>
     <a href="https://www.facebook.com/findoutapp" id="footer-facebook" target="_blank" rel="noopener">Facebook</a>
-    <a href="mailto:malta_rafa@hotmail.com" id="footer-email">Email</a>
+    <a href="mailto:hello@findoutfund.org" id="footer-email">Email</a>
   </div>
   <div class="footer-links">
     <a href="/privacy.html">Privacy Policy</a>
-    <a href="https://findoutfund.org" target="_blank" rel="noopener">findoutfund.org</a>
+    <a href="/support.html">Support</a>
+    <a href="https://findoutfund.org">findoutfund.org</a>
   </div>
   <p>© 2026 <strong>FindOut</strong> · Not affiliated with the IRS.</p>
 </footer>
@@ -297,11 +298,13 @@ footer strong { color:#4CAF50; }
 <script>
 (function () {
   var cfg = window.FINDOUT_SITE || {};
-  var email = cfg.contactEmail || 'malta_rafa@hotmail.com';
+  var email = cfg.contactEmail || 'hello@findoutfund.org';
+  var supportEmail = cfg.supportEmail || 'support@findoutfund.org';
 
   if (cfg.instagramUrl) document.getElementById('footer-instagram').href = cfg.instagramUrl;
   if (cfg.facebookUrl) document.getElementById('footer-facebook').href = cfg.facebookUrl;
   document.getElementById('footer-email').href = 'mailto:' + email;
+  document.getElementById('support-email-btn').href = 'mailto:' + supportEmail + '?subject=Support%20FindOut';
 
   var supportBtn = document.getElementById('support-stripe-btn');
   var supportNote = document.getElementById('support-stripe-note');
@@ -309,7 +312,7 @@ footer strong { color:#4CAF50; }
     supportBtn.href = cfg.stripeSupportUrl;
     supportNote.textContent = 'Secure one-time or recurring gift via Stripe.';
   } else {
-    supportBtn.href = 'mailto:' + email + '?subject=Support%20FindOut';
+    supportBtn.href = 'mailto:' + supportEmail + '?subject=Support%20FindOut';
     supportBtn.textContent = 'Email to support FindOut';
   }
 
