@@ -1,0 +1,18 @@
+# FindOut marketing site — static landing page at repo root.
+# Connect this repo in Netlify: Site settings → Build & deploy → Link repository.
+# Build command: (leave empty)  |  Publish directory: .
+
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

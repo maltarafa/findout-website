@@ -4,35 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FindOut — Find Out Before You Give.</title>
-<meta name="description" content="Search, verify, donate and volunteer. Free app.">
+<meta name="description" content="FindOut shows you IRS verification and real financials for every nonprofit in America. Search. Verify. Donate. Volunteer. Free.">
+<link rel="canonical" href="https://findout-app.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://findout-app.netlify.app/">
+<meta property="og:title" content="FindOut — Find Out Before You Give.">
+<meta property="og:description" content="Search, verify, donate and volunteer. Real IRS data for 1.8M+ nonprofits. Free iOS app.">
+<meta property="og:site_name" content="FindOut">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FindOut — Find Out Before You Give.">
+<meta name="twitter:description" content="Search, verify, donate and volunteer. Real IRS data for 1.8M+ nonprofits.">
+<script src="/site-config.js"></script>
+<script>
+(function () {
+  var cfg = window.FINDOUT_SITE || {};
+  if (cfg.plausibleEnabled && cfg.plausibleDomain) {
+    var s = document.createElement('script');
+    s.defer = true;
+    s.dataset.domain = cfg.plausibleDomain;
+    s.src = 'https://plausible.io/js/script.js';
+    document.head.appendChild(s);
+  }
+})();
+</script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family: Georgia, serif; background: #fff; color: #1B3D1E; }
-nav { padding: 1.5rem 5%; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #E8F5E9; }
-.logo { font-size:1.4rem; font-weight:700; color:#1B3D1E; }
+nav { padding: 1.5rem 5%; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #E8F5E9; flex-wrap:wrap; gap:1rem; }
+.logo { font-size:1.4rem; font-weight:700; color:#1B3D1E; text-decoration:none; }
 .logo span { color:#4CAF50; }
-.nav-btn { background:#2E7D32; color:white; padding:0.5rem 1.2rem; border-radius:100px; text-decoration:none; font-size:0.9rem; }
+.nav-links { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+.nav-links a { color:#6B7280; text-decoration:none; font-size:0.85rem; font-family: system-ui, sans-serif; }
+.nav-links a:hover { color:#2E7D32; }
+.nav-btn { background:#2E7D32; color:white; padding:0.5rem 1.2rem; border-radius:100px; text-decoration:none; font-size:0.9rem; font-family: system-ui, sans-serif; }
 .hero { padding: 100px 5% 80px; max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
 h1 { font-size: clamp(3rem,6vw,5.5rem); line-height:0.95; letter-spacing:-0.03em; margin-bottom:1.5rem; }
 h1 em { font-style:italic; color:#2E7D32; font-weight:300; }
-.sub { font-size:1.05rem; color:#6B7280; line-height:1.75; margin-bottom:2rem; font-weight:300; max-width:440px; }
-.btn { display:inline-block; background:#2E7D32; color:white; padding:0.9rem 2rem; border-radius:100px; text-decoration:none; font-size:0.95rem; font-weight:600; }
-.proof { display:flex; gap:1.5rem; margin-top:1.5rem; flex-wrap:wrap; }
-.proof span { font-size:0.8rem; color:#6B7280; }
+.sub { font-size:1.05rem; color:#6B7280; line-height:1.75; margin-bottom:2rem; font-weight:300; max-width:440px; font-family: system-ui, sans-serif; }
+.btn { display:inline-block; background:#2E7D32; color:white; padding:0.9rem 2rem; border-radius:100px; text-decoration:none; font-size:0.95rem; font-weight:600; border:none; cursor:pointer; font-family: system-ui, sans-serif; }
+.btn-secondary { background:transparent; color:#2E7D32; border:2px solid #2E7D32; margin-left:0.5rem; }
+.btn-outline-light { background:transparent; color:white; border:2px solid rgba(255,255,255,0.4); }
+.btn:hover { opacity:0.92; }
+.cta-row { display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center; margin-bottom:1.5rem; }
+.proof { display:flex; gap:1.5rem; margin-top:0.5rem; flex-wrap:wrap; }
+.proof span { font-size:0.8rem; color:#6B7280; font-family: system-ui, sans-serif; }
 .proof span::before { content:'✓ '; color:#2E7D32; font-weight:700; }
+.waitlist { margin-top:1.5rem; max-width:440px; }
+.waitlist label { display:block; font-size:0.85rem; color:#6B7280; margin-bottom:0.5rem; font-family: system-ui, sans-serif; }
+.waitlist-row { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.waitlist input[type=email] { flex:1; min-width:200px; padding:0.75rem 1rem; border:1px solid #E8F5E9; border-radius:100px; font-size:0.9rem; font-family: system-ui, sans-serif; }
+.waitlist input:focus { outline:2px solid #2E7D32; border-color:transparent; }
+.waitlist-note { font-size:0.75rem; color:#9CA3AF; margin-top:0.5rem; font-family: system-ui, sans-serif; }
+.waitlist-success { display:none; color:#2E7D32; font-size:0.9rem; margin-top:0.75rem; font-family: system-ui, sans-serif; }
 .phone-wrap { display:flex; justify-content:center; }
+.phone-label { text-align:center; font-size:0.65rem; color:#9CA3AF; margin-top:0.5rem; font-family: system-ui, sans-serif; }
 .phone { width:260px; height:520px; background:#1A2E1A; border-radius:40px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 40px 80px rgba(0,0,0,0.4); overflow:hidden; display:flex; flex-direction:column; }
 .phone-notch { width:80px; height:20px; background:#111; border-radius:0 0 12px 12px; margin:0 auto; }
 .phone-screen { flex:1; background:#F8F9FA; padding:10px; display:flex; flex-direction:column; gap:8px; }
 .phone-name { font-size:1rem; font-weight:700; color:#2E7D32; font-family:Georgia,serif; }
-.phone-search { background:#EFEFEF; border-radius:8px; padding:8px 10px; font-size:0.7rem; color:#999; }
+.phone-search { background:#EFEFEF; border-radius:8px; padding:8px 10px; font-size:0.7rem; color:#999; font-family: system-ui, sans-serif; }
 .p-card { background:white; border-radius:10px; padding:10px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-.p-name { font-size:0.75rem; font-weight:700; color:#111; }
-.p-loc { font-size:0.62rem; color:#999; margin-bottom:6px; }
+.p-name { font-size:0.75rem; font-weight:700; color:#111; font-family: system-ui, sans-serif; }
+.p-loc { font-size:0.62rem; color:#999; margin-bottom:6px; font-family: system-ui, sans-serif; }
 .p-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-bottom:6px; }
-.p-stat { background:#F8F9FA; border-radius:4px; padding:4px; text-align:center; font-size:0.6rem; }
+.p-stat { background:#F8F9FA; border-radius:4px; padding:4px; text-align:center; font-size:0.6rem; font-family: system-ui, sans-serif; }
 .p-stat b { display:block; font-size:0.68rem; color:#111; }
-.p-btn { background:#2E7D32; color:white; border-radius:6px; padding:7px; text-align:center; font-size:0.65rem; font-weight:700; }
+.p-btn { background:#2E7D32; color:white; border-radius:6px; padding:7px; text-align:center; font-size:0.65rem; font-weight:700; font-family: system-ui, sans-serif; }
 .stats { background:#1B3D1E; color:white; padding:80px 5%; }
 .stats-inner { max-width:1200px; margin:0 auto; }
 .stats h2 { font-size:clamp(2rem,4vw,3rem); margin-bottom:3rem; letter-spacing:-0.03em; }
@@ -40,8 +77,8 @@ h1 em { font-style:italic; color:#2E7D32; font-weight:300; }
 .stat-box { background:rgba(255,255,255,0.05); padding:2.5rem 2rem; }
 .stat-num { font-size:clamp(2.5rem,4vw,4rem); font-weight:900; display:block; letter-spacing:-0.04em; margin-bottom:0.5rem; }
 .stat-num.red { color:#FF8A80; }
-.stat-desc { font-size:0.85rem; color:rgba(255,255,255,0.55); line-height:1.5; }
-.stat-src { font-size:0.65rem; color:rgba(255,255,255,0.25); margin-top:0.5rem; font-style:italic; }
+.stat-desc { font-size:0.85rem; color:rgba(255,255,255,0.55); line-height:1.5; font-family: system-ui, sans-serif; }
+.stat-src { font-size:0.65rem; color:rgba(255,255,255,0.25); margin-top:0.5rem; font-style:italic; font-family: system-ui, sans-serif; }
 .until { font-size:clamp(1.5rem,3vw,2.2rem); font-weight:900; color:#4CAF50; margin-top:3rem; }
 .features { padding:80px 5%; background:#F7F9F7; }
 .features-inner { max-width:1200px; margin:0 auto; }
@@ -50,65 +87,113 @@ h1 em { font-style:italic; color:#2E7D32; font-weight:300; }
 .feat { background:white; padding:2rem 1.5rem; transition:background 0.3s; }
 .feat:hover { background:#E8F5E9; }
 .feat-icon { font-size:1.8rem; margin-bottom:1rem; display:block; }
-.feat-num { font-size:0.65rem; color:rgba(46,125,50,0.4); font-weight:700; letter-spacing:0.1em; margin-bottom:0.4rem; }
+.feat-num { font-size:0.65rem; color:rgba(46,125,50,0.4); font-weight:700; letter-spacing:0.1em; margin-bottom:0.4rem; font-family: system-ui, sans-serif; }
 .feat-title { font-size:1.1rem; font-weight:700; color:#1B3D1E; margin-bottom:0.5rem; }
-.feat-text { font-size:0.82rem; color:#6B7280; line-height:1.6; }
+.feat-text { font-size:0.82rem; color:#6B7280; line-height:1.6; font-family: system-ui, sans-serif; }
+.support { padding:80px 5%; background:#E8F5E9; }
+.support-inner { max-width:720px; margin:0 auto; text-align:center; }
+.support h2 { font-size:clamp(1.8rem,3vw,2.5rem); margin-bottom:1rem; letter-spacing:-0.03em; }
+.support p { color:#6B7280; line-height:1.7; margin-bottom:1.5rem; font-family: system-ui, sans-serif; font-size:0.95rem; }
+.support .btn { margin:0.25rem; }
+.support-note { font-size:0.8rem; color:#9CA3AF; margin-top:1rem; font-family: system-ui, sans-serif; }
 .download { background:#1B3D1E; color:white; padding:100px 5%; text-align:center; }
 .download h2 { font-size:clamp(2.5rem,5vw,4rem); letter-spacing:-0.04em; margin-bottom:1rem; }
-.download p { color:rgba(255,255,255,0.6); margin-bottom:2rem; font-size:1rem; }
+.download p { color:rgba(255,255,255,0.6); margin-bottom:2rem; font-size:1rem; font-family: system-ui, sans-serif; }
 .download .btn { background:white; color:#1B3D1E; }
 .download .btn:hover { background:#E8F5E9; }
-footer { background:#0F1F0F; color:rgba(255,255,255,0.4); padding:40px 5%; text-align:center; font-size:0.8rem; }
+.download-sub { margin-top:1rem; font-size:0.8rem; color:rgba(255,255,255,0.3); font-family: system-ui, sans-serif; }
+.download-waitlist { max-width:420px; margin:2rem auto 0; text-align:left; }
+.download-waitlist input[type=email] { width:100%; padding:0.75rem 1rem; border:none; border-radius:100px; margin-bottom:0.75rem; font-family: system-ui, sans-serif; }
+footer { background:#0F1F0F; color:rgba(255,255,255,0.4); padding:40px 5%; text-align:center; font-size:0.8rem; font-family: system-ui, sans-serif; }
 footer strong { color:#4CAF50; }
-@media(max-width:768px) { .hero { grid-template-columns:1fr; } .phone-wrap { display:none; } .feat-grid { grid-template-columns:1fr 1fr; } .stats-grid { grid-template-columns:1fr; } }
+.footer-social { display:flex; justify-content:center; gap:1.25rem; margin-bottom:1rem; flex-wrap:wrap; }
+.footer-social a { color:rgba(255,255,255,0.55); text-decoration:none; }
+.footer-social a:hover { color:#4CAF50; }
+.footer-links { margin-bottom:0.75rem; }
+.footer-links a { color:rgba(255,255,255,0.45); text-decoration:none; margin:0 0.5rem; }
+.footer-links a:hover { color:#4CAF50; }
+.hidden { display:none !important; }
+@media(max-width:768px) {
+  .hero { grid-template-columns:1fr; padding-top:60px; }
+  .phone-wrap { display:none; }
+  .feat-grid { grid-template-columns:1fr 1fr; }
+  .stats-grid { grid-template-columns:1fr; }
+  .btn-secondary { margin-left:0; }
+}
 </style>
 </head>
 <body>
 <nav>
-  <div class="logo">Find<span>Out</span></div>
-  <a href="#download" class="nav-btn">Get the App</a>
+  <a href="/" class="logo">Find<span>Out</span></a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#support">Support FindOut</a>
+    <a href="#download" class="nav-btn">Join waitlist</a>
+  </div>
 </nav>
+
 <section class="hero">
   <div>
     <h1>Know where your money <em>actually goes.</em></h1>
     <p class="sub">Every nonprofit. Real IRS data. Verified financials. Volunteer opportunities. All in one app — free.</p>
-    <a href="#download" class="btn">🍎 Download Free</a>
+    <div class="cta-row" id="hero-cta">
+      <a href="#download" class="btn" id="hero-primary-btn">Join the waitlist</a>
+      <a href="#" class="btn btn-secondary hidden" id="hero-testflight-btn" target="_blank" rel="noopener">TestFlight beta</a>
+    </div>
     <div class="proof">
       <span>1.8M+ Nonprofits</span>
       <span>Real IRS Data</span>
       <span>Free App</span>
     </div>
+    <div class="waitlist" id="hero-waitlist">
+      <label for="waitlist-email-hero">Get notified when FindOut launches in your area</label>
+      <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form" action="/?waitlist=thanks">
+        <input type="hidden" name="form-name" value="waitlist">
+        <p class="hidden"><label>Don’t fill this out: <input name="bot-field"></label></p>
+        <input type="hidden" name="source" value="hero">
+        <div class="waitlist-row">
+          <input type="email" id="waitlist-email-hero" name="email" placeholder="you@email.com" required autocomplete="email">
+          <button type="submit" class="btn">Notify me</button>
+        </div>
+        <p class="waitlist-note">No spam. Unsubscribe anytime. iOS launching soon.</p>
+        <p class="waitlist-success">Thanks — you’re on the list!</p>
+      </form>
+    </div>
   </div>
   <div class="phone-wrap">
-    <div class="phone">
-      <div class="phone-notch"></div>
-      <div class="phone-screen">
-        <div class="phone-name">FindOut</div>
-        <div class="phone-search">🔍 Search nonprofits near you...</div>
-        <div class="p-card">
-          <div class="p-name">American Red Cross</div>
-          <div class="p-loc">✅ IRS Verified · Washington, DC</div>
-          <div class="p-stats">
-            <div class="p-stat"><b>$2.9B</b>Revenue</div>
-            <div class="p-stat"><b>A+</b>Rating</div>
-            <div class="p-stat"><b>4.8★</b>Reviews</div>
+    <div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-name">FindOut</div>
+          <div class="phone-search">🔍 Search nonprofits near you...</div>
+          <div class="p-card">
+            <div class="p-name">American Red Cross</div>
+            <div class="p-loc">✅ IRS Verified · Washington, DC</div>
+            <div class="p-stats">
+              <div class="p-stat"><b>$2.9B</b>Revenue</div>
+              <div class="p-stat"><b>990</b>Filed</div>
+              <div class="p-stat"><b>CN</b>Rated</div>
+            </div>
+            <div class="p-btn">❤️ Donate Now</div>
           </div>
-          <div class="p-btn">❤️ Donate Now</div>
-        </div>
-        <div class="p-card">
-          <div class="p-name">Feeding America</div>
-          <div class="p-loc">✅ IRS Verified · Chicago, IL</div>
-          <div class="p-stats">
-            <div class="p-stat"><b>$4.1B</b>Revenue</div>
-            <div class="p-stat"><b>A</b>Rating</div>
-            <div class="p-stat"><b>4.9★</b>Reviews</div>
+          <div class="p-card">
+            <div class="p-name">U Go Initiative</div>
+            <div class="p-loc">✅ IRS Verified · Solana Beach, CA</div>
+            <div class="p-stats">
+              <div class="p-stat"><b>990</b>Filed</div>
+              <div class="p-stat"><b>Local</b>Near Me</div>
+              <div class="p-stat"><b>Give</b>Secure</div>
+            </div>
+            <div class="p-btn">🙋 Volunteer Near Me</div>
           </div>
-          <div class="p-btn">🙋 Volunteer Near Me</div>
         </div>
       </div>
+      <p class="phone-label">App preview — sample data for illustration</p>
     </div>
   </div>
 </section>
+
 <section class="stats">
   <div class="stats-inner">
     <h2>$592 billion given.<br>Mostly blindly.</h2>
@@ -132,7 +217,8 @@ footer strong { color:#4CAF50; }
     <p class="until">FindOut changes that.</p>
   </div>
 </section>
-<section class="features">
+
+<section class="features" id="how-it-works">
   <div class="features-inner">
     <h2>One app.<br>Total confidence.</h2>
     <div class="feat-grid">
@@ -163,14 +249,100 @@ footer strong { color:#4CAF50; }
     </div>
   </div>
 </section>
+
+<section class="support" id="support">
+  <div class="support-inner">
+    <h2>Support FindOut</h2>
+    <p>FindOut is free for donors and nonprofits. A small platform fee on in-app donations helps keep the lights on. If you believe in transparent giving, you can support development, local outreach, and fee relief for small orgs.</p>
+    <a href="#" class="btn" id="support-stripe-btn" target="_blank" rel="noopener">Support FindOut</a>
+    <a href="mailto:malta_rafa@hotmail.com?subject=Support%20FindOut" class="btn btn-secondary" id="support-email-btn">Contact us</a>
+    <p class="support-note" id="support-stripe-note">Add your Stripe Payment Link in site-config.js after creating it in the Stripe Dashboard.</p>
+  </div>
+</section>
+
 <section class="download" id="download">
   <h2>Give with confidence.</h2>
   <p>Search. Verify. Donate. Volunteer. Everything you need to give smarter.</p>
-  <a href="https://apps.apple.com/app/findout" class="btn">🍎 Download on App Store</a>
-  <p style="margin-top:1rem;font-size:0.8rem;color:rgba(255,255,255,0.3)">iOS · Free</p>
+  <div id="download-buttons">
+    <a href="#download" class="btn" id="download-primary-btn">Join the waitlist ↓</a>
+    <a href="#" class="btn btn-outline-light hidden" id="download-testflight-btn" target="_blank" rel="noopener">Join TestFlight beta</a>
+    <a href="#" class="btn hidden" id="download-appstore-btn" target="_blank" rel="noopener">🍎 Download on App Store</a>
+  </div>
+  <p class="download-sub" id="download-status">iOS · Coming to App Store soon · Join the waitlist below</p>
+  <div class="download-waitlist">
+    <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form" action="/?waitlist=thanks">
+      <input type="hidden" name="form-name" value="waitlist">
+      <p class="hidden"><label>Don’t fill this out: <input name="bot-field"></label></p>
+      <input type="hidden" name="source" value="download">
+      <input type="email" name="email" placeholder="Email for launch updates" required autocomplete="email">
+      <button type="submit" class="btn" style="width:100%">Join the waitlist</button>
+      <p class="waitlist-success" style="color:#A5D6A7;text-align:center">Thanks — you’re on the list!</p>
+    </form>
+  </div>
 </section>
+
 <footer>
-  <p>© 2026 <strong>FindOut</strong> · rafinda.org · Not affiliated with the IRS.</p>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/findoutapp" id="footer-instagram" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.facebook.com/findoutapp" id="footer-facebook" target="_blank" rel="noopener">Facebook</a>
+    <a href="mailto:malta_rafa@hotmail.com" id="footer-email">Email</a>
+  </div>
+  <div class="footer-links">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="https://rafinda.org" target="_blank" rel="noopener">rafinda.org</a>
+  </div>
+  <p>© 2026 <strong>FindOut</strong> · Not affiliated with the IRS.</p>
 </footer>
+
+<script>
+(function () {
+  var cfg = window.FINDOUT_SITE || {};
+  var email = cfg.contactEmail || 'malta_rafa@hotmail.com';
+
+  if (cfg.instagramUrl) document.getElementById('footer-instagram').href = cfg.instagramUrl;
+  if (cfg.facebookUrl) document.getElementById('footer-facebook').href = cfg.facebookUrl;
+  document.getElementById('footer-email').href = 'mailto:' + email;
+
+  var supportBtn = document.getElementById('support-stripe-btn');
+  var supportNote = document.getElementById('support-stripe-note');
+  if (cfg.stripeSupportUrl) {
+    supportBtn.href = cfg.stripeSupportUrl;
+    supportNote.textContent = 'Secure one-time or recurring gift via Stripe.';
+  } else {
+    supportBtn.href = 'mailto:' + email + '?subject=Support%20FindOut';
+    supportBtn.textContent = 'Email to support FindOut';
+  }
+
+  function show(el) { if (el) el.classList.remove('hidden'); }
+
+  if (cfg.appStoreUrl) {
+    show(document.getElementById('download-appstore-btn'));
+    document.getElementById('download-appstore-btn').href = cfg.appStoreUrl;
+    document.getElementById('download-primary-btn').classList.add('hidden');
+    document.getElementById('hero-primary-btn').textContent = 'Download free';
+    document.getElementById('hero-primary-btn').href = cfg.appStoreUrl;
+    document.getElementById('download-status').textContent = 'iOS · Free on the App Store';
+    document.querySelectorAll('.waitlist-form').forEach(function (f) {
+      f.closest('.waitlist, .download-waitlist').style.display = 'none';
+    });
+  } else if (cfg.testflightUrl) {
+    show(document.getElementById('hero-testflight-btn'));
+    show(document.getElementById('download-testflight-btn'));
+    document.getElementById('hero-testflight-btn').href = cfg.testflightUrl;
+    document.getElementById('download-testflight-btn').href = cfg.testflightUrl;
+    document.getElementById('download-status').textContent = 'iOS · TestFlight beta open · App Store coming soon';
+  }
+
+  document.querySelectorAll('.waitlist-form').forEach(function (form) {
+    form.addEventListener('submit', function () {
+      if (typeof plausible === 'function') plausible('Waitlist Signup');
+    });
+  });
+
+  if (window.location.search.indexOf('waitlist=thanks') !== -1) {
+    document.querySelectorAll('.waitlist-success').forEach(function (el) { el.style.display = 'block'; });
+  }
+})();
+</script>
 </body>
 </html>
