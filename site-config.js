@@ -3,8 +3,8 @@
  */
 window.FINDOUT_SITE = {
   siteUrl: 'https://findoutfund.org',
-  contactEmail: 'hello@findoutfund.org',
-  supportEmail: 'support@findoutfund.org',
+  contactEmail: 'findoutfund@gmail.com',
+  supportEmail: 'findoutfund@gmail.com',
   testflightUrl: '',
   appStoreUrl: '',
   stripeSupportUrl: '',
