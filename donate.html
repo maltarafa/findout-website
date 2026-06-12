@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Donate — FindOut</title>
+<title>Donate — FindOut Fund</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="https://findoutfund.org/donate.html">
 <script src="/site-config.js"></script>
@@ -33,7 +33,7 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
 </head>
 <body>
 <div class="wrap">
-  <div class="logo"><a href="/">FindOut</a></div>
+  <div class="logo"><a href="/">FindOut Fund</a></div>
   <div id="app" class="card"></div>
 </div>
 <script>
@@ -59,12 +59,12 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
     app.innerHTML =
       '<div class="success"><h1>Thank you!</h1><p>Your gift to <strong>' + esc(orgName) +
       '</strong> was submitted. You should receive a receipt by email from Stripe.</p>' +
-      '<p class="note" style="margin-top:20px">You can close this page and return to the FindOut app.</p></div>';
+      '<p class="note" style="margin-top:20px">You can close this page and return to the FindOut Fund app.</p></div>';
     return;
   }
 
   if (!ein || ein.length !== 9) {
-    app.innerHTML = '<p class="error" style="display:block">Missing organization. Open this page from the FindOut app.</p>';
+    app.innerHTML = '<p class="error" style="display:block">Missing organization. Open this page from the FindOut Fund app.</p>';
     return;
   }
 
@@ -72,7 +72,7 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
     app.innerHTML =
       '<h1>Donate in Safari</h1>' +
       '<p class="org">to <strong>' + esc(orgName) + '</strong></p>' +
-      '<p class="note">Payments go directly to the nonprofit&apos;s Stripe account. FindOut receives a 2.5% platform fee. FindOut never holds your gift.</p>' +
+      '<p class="note">Payments go directly to the nonprofit&apos;s Stripe account. FindOut Fund receives a 2.5% platform fee. FindOut Fund never holds your gift.</p>' +
       '<label for="email">Email (for receipt)</label>' +
       '<input id="email" type="email" placeholder="you@email.com" autocomplete="email">' +
       '<label>Amount (USD)</label>' +
@@ -151,7 +151,8 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
       }
       window.location.href = data.url;
     } catch (e) {
-      errEl.textContent = e.message || 'Something went wrong. Try the official website link below.';
+      errEl.textContent = (e.message || 'Something went wrong.') +
+        (website ? ' You can still give on the official website below.' : ' This nonprofit must connect Stripe before FindOut Fund checkout works.');
       errEl.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Continue to secure payment';
