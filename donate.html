@@ -15,7 +15,8 @@ body { font-family: system-ui, -apple-system, sans-serif; background:#f5f5f5; co
 .logo a { color:#2E7D32; font-size:1.25rem; font-weight:700; text-decoration:none; font-family: Georgia, serif; }
 .card { background:#fff; border-radius:16px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
 h1 { font-size:1.35rem; margin-bottom:4px; font-family: Georgia, serif; }
-.org { color:#666; font-size:0.95rem; margin-bottom:20px; }
+.org { color:#666; font-size:0.95rem; margin-bottom:12px; }
+.ready { background:#E8F5E9; color:#1B5E20; padding:10px 12px; border-radius:8px; font-size:0.85rem; margin-bottom:16px; }
 label { display:block; font-size:0.85rem; font-weight:600; color:#555; margin-bottom:6px; margin-top:14px; }
 input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px; font-size:16px; }
 .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
@@ -24,17 +25,18 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
 .btn { width:100%; margin-top:24px; padding:16px; background:#2E7D32; color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; }
 .btn:disabled { background:#aaa; cursor:not-allowed; }
 .note { font-size:0.8rem; color:#888; margin-top:16px; line-height:1.5; }
-.error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; font-size:0.9rem; margin-top:12px; display:none; }
+.error { background:#ffebee; color:#c62828; padding:12px; border-radius:8px; font-size:0.9rem; margin-top:12px; }
 .success { text-align:center; padding:32px 16px; }
 .success h1 { color:#2E7D32; margin-bottom:12px; }
 .fallback { margin-top:16px; text-align:center; }
-.fallback a { color:#2E7D32; }
+.fallback a { color:#2E7D32; font-weight:600; }
+.loading { text-align:center; padding:40px 16px; color:#666; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="logo"><a href="/">FindOut Fund</a></div>
-  <div id="app" class="card"></div>
+  <div id="app" class="card"><div class="loading">Loading secure checkout…</div></div>
 </div>
 <script>
 (function () {
@@ -47,12 +49,26 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
   var supabaseUrl = (cfg.supabaseUrl || '').replace(/\/$/, '');
   var supabaseKey = cfg.supabaseAnonKey || '';
   var app = document.getElementById('app');
-  var selectedAmount = 25;
+  var selectedAmount = 10;
+  var chargesEnabled = false;
 
   function esc(s) {
     var d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
+  }
+
+  function websiteHref() {
+    if (!website) return '';
+    return website.startsWith('http') ? website : 'https://' + website;
+  }
+
+  function apiHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + supabaseKey,
+      apikey: supabaseKey,
+    };
   }
 
   if (success) {
@@ -64,15 +80,54 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
   }
 
   if (!ein || ein.length !== 9) {
-    app.innerHTML = '<p class="error" style="display:block">Missing organization. Open this page from the FindOut Fund app.</p>';
+    app.innerHTML = '<p class="error">Open this page by tapping <strong>Donate</strong> on a nonprofit in the FindOut Fund app.</p>';
     return;
   }
 
-  function renderForm(err) {
+  function bindAmountControls() {
+    document.querySelectorAll('.chip').forEach(function (el) {
+      el.onclick = function () {
+        selectedAmount = Number(el.getAttribute('data-amt'));
+        document.getElementById('custom').value = '';
+        document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+        el.classList.add('active');
+        updatePayButton();
+      };
+    });
+    document.getElementById('custom').oninput = function () {
+      selectedAmount = parseFloat(this.value) || 0;
+      document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+      updatePayButton();
+    };
+    document.getElementById('pay').onclick = startCheckout;
+  }
+
+  function currentAmount() {
+    var custom = parseFloat(document.getElementById('custom').value);
+    return custom >= 1 ? custom : selectedAmount;
+  }
+
+  function updatePayButton() {
+    var btn = document.getElementById('pay');
+    if (!btn) return;
+    var amount = currentAmount();
+    btn.textContent = amount >= 1 ? 'Pay $' + amount.toFixed(2) + ' with card' : 'Pay with card';
+  }
+
+  function renderNotReady(message) {
+    var link = websiteHref();
     app.innerHTML =
-      '<h1>Donate in Safari</h1>' +
+      '<h1>Donate to ' + esc(orgName) + '</h1>' +
+      '<p class="error">' + esc(message) + '</p>' +
+      '<p class="note">This organization has not finished payment setup on FindOut Fund yet.</p>' +
+      (link ? '<p class="fallback"><a href="' + esc(link) + '">Give on the official website instead</a></p>' : '');
+  }
+
+  function renderForm() {
+    app.innerHTML =
+      '<h1>Secure donation</h1>' +
       '<p class="org">to <strong>' + esc(orgName) + '</strong></p>' +
-      '<p class="note">Payments go directly to the nonprofit&apos;s Stripe account. FindOut Fund receives a 2.5% platform fee. FindOut Fund never holds your gift.</p>' +
+      '<div class="ready">Next step: enter your card on Stripe&apos;s secure payment page (like Apple Pay / card checkout).</div>' +
       '<label for="email">Email (for receipt)</label>' +
       '<input id="email" type="email" placeholder="you@email.com" autocomplete="email">' +
       '<label>Amount (USD)</label>' +
@@ -83,31 +138,19 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
       '</div>' +
       '<label for="custom">Custom amount</label>' +
       '<input id="custom" type="number" min="1" step="0.01" placeholder="Enter amount">' +
-      '<div class="error" id="err">' + (err ? esc(err) : '') + '</div>' +
-      '<button class="btn" id="pay">Continue to secure payment</button>' +
-      (website ? '<p class="fallback"><a href="' + esc(website.startsWith('http') ? website : 'https://' + website) + '" target="_blank" rel="noopener">Or give on the official website</a></p>' : '');
-
-    document.querySelectorAll('.chip').forEach(function (el) {
-      el.onclick = function () {
-        selectedAmount = Number(el.getAttribute('data-amt'));
-        document.getElementById('custom').value = '';
-        document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
-        el.classList.add('active');
-      };
-    });
-    document.getElementById('custom').oninput = function () {
-      selectedAmount = parseFloat(this.value) || 0;
-      document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
-    };
-    document.getElementById('pay').onclick = startCheckout;
+      '<div class="error" id="err" style="display:none"></div>' +
+      '<button class="btn" id="pay">Pay with card</button>' +
+      '<p class="note">Payment goes directly to the nonprofit. FindOut Fund receives a 2.5% platform fee. FindOut Fund never holds your gift.</p>' +
+      (websiteHref() ? '<p class="fallback"><a href="' + esc(websiteHref()) + '">Or give on the official website</a></p>' : '');
+    bindAmountControls();
+    updatePayButton();
   }
 
   async function startCheckout() {
     var errEl = document.getElementById('err');
     var btn = document.getElementById('pay');
     var email = (document.getElementById('email').value || '').trim();
-    var custom = parseFloat(document.getElementById('custom').value);
-    var amount = custom >= 1 ? custom : selectedAmount;
+    var amount = currentAmount();
 
     errEl.style.display = 'none';
     if (!email || email.indexOf('@') < 1) {
@@ -120,23 +163,14 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
       errEl.style.display = 'block';
       return;
     }
-    if (!supabaseUrl || !supabaseKey) {
-      errEl.textContent = 'Donation page is not configured yet. Use the organization website below.';
-      errEl.style.display = 'block';
-      return;
-    }
 
     btn.disabled = true;
-    btn.textContent = 'Loading…';
+    btn.textContent = 'Opening Stripe…';
 
     try {
       var res = await fetch(supabaseUrl + '/functions/v1/create-checkout-session', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + supabaseKey,
-          apikey: supabaseKey,
-        },
+        headers: apiHeaders(),
         body: JSON.stringify({
           ein: ein,
           orgName: orgName,
@@ -147,19 +181,41 @@ input { width:100%; padding:12px 14px; border:1px solid #ddd; border-radius:10px
       });
       var data = await res.json();
       if (!res.ok || !data.success || !data.url) {
-        throw new Error(data.error || 'Could not start checkout');
+        throw new Error(data.error || 'Could not open secure payment');
       }
       window.location.href = data.url;
     } catch (e) {
-      errEl.textContent = (e.message || 'Something went wrong.') +
-        (website ? ' You can still give on the official website below.' : ' This nonprofit must connect Stripe before FindOut Fund checkout works.');
+      errEl.textContent = e.message || 'Could not open payment. Try the official website link below.';
       errEl.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'Continue to secure payment';
+      updatePayButton();
     }
   }
 
-  renderForm('');
+  async function init() {
+    if (!supabaseUrl || !supabaseKey) {
+      renderNotReady('Payment page is not configured yet.');
+      return;
+    }
+    try {
+      var res = await fetch(supabaseUrl + '/functions/v1/connect-status', {
+        method: 'POST',
+        headers: apiHeaders(),
+        body: JSON.stringify({ ein: ein }),
+      });
+      var data = await res.json();
+      chargesEnabled = Boolean(data.chargesEnabled);
+      if (!chargesEnabled) {
+        renderNotReady('Online card payment is not available for this nonprofit yet.');
+        return;
+      }
+      renderForm();
+    } catch (e) {
+      renderNotReady('Could not verify payment setup. Please try again.');
+    }
+  }
+
+  init();
 })();
 </script>
 </body>
